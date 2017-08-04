@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <appender name="myConsole" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{dd HH:mm:ss,SSS\} %-5p] [%t] %c{2\} - %m%n" />
+        </layout>
+
+        <!--过滤器设置输出的级别 -->
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="levelMin" value="debug" />
+            <param name="levelMax" value="warn" />
+            <param name="AcceptOnMatch" value="true" />
+        </filter>
+    </appender>
+
+    <appender name="myFile" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="log4jTest.log" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%t] - %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="async_file" class="org.apache.log4j.AsyncAppender">
+        <param name="BufferSize" value="32" />
+        <appender-ref ref="myFile" />
+    </appender>
+
+    <logger name="logtest" additivity="false">
+        <level value="info" />
+        <appender-ref ref="myFile" /> <!-- 同步:myFile 异步:async_file -->
+    </logger>
+
+</log4j:configuration>
